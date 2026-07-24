@@ -8,7 +8,7 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
 export async function register(req, res) {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
 
         if (!name || !email || !password) {
             return res.status(400).json({ success: false, message: "name, email and password are all required" });
@@ -26,7 +26,16 @@ export async function register(req, res) {
             return res.status(400).json({ success: false, message: "An account with this email already exists" });
         }
 
-        const user = await User.create({ name, email, password });
+        // Public registration can only ever create "learner" or "creator"
+        // accounts — "admin" must be granted later via the Admin
+        // Dashboard's role management, never self-selected at signup.
+        // Anything else sent (including "admin", or a typo/garbage value)
+        // silently falls back to "learner" rather than erroring, so a
+        // stray value from the client can't block registration.
+        const allowedRoles = ["learner", "creator"];
+        const finalRole = allowedRoles.includes(role) ? role : "learner";
+
+        const user = await User.create({ name, email, password, role: finalRole });
         await CreatorProfile.create({ user: user._id });
 
         const token = generateToken(user);

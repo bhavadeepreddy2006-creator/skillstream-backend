@@ -1,6 +1,6 @@
 import express from "express";
 import { getUsers, getUserById, UpdateUser, deleteUser, updateUserRole } from "../controllers/userControllers.js";
-import { protect, selfOrAdmin, authorize } from "../middleware/authMiddleware.js";
+import { protect, authorize } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -9,8 +9,8 @@ const router = express.Router();
 // public/private visibility model gets built later.
 router.get("/", protect, getUsers);
 router.get("/:id", protect, getUserById);
-router.put("/:id", protect, selfOrAdmin, UpdateUser);
+router.put("/:id", protect, UpdateUser);
 router.put("/:id/role", protect, authorize("admin"), updateUserRole);
-router.delete("/:id", protect, selfOrAdmin, deleteUser);
+router.delete("/:id", protect, deleteUser);
 
 export default router;

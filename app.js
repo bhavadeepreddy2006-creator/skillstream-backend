@@ -5,7 +5,7 @@ import multer from "multer";
 
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import creatorProfileRoutes from "./routes/creatorProfileRoutes.js";
+import CreatorProfile from "./models/creatorProfile.js";
 import postRoutes from "./routes/postRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import followRoutes from "./routes/followRoutes.js";
@@ -15,6 +15,7 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 // This file exports the configured Express app WITHOUT starting a server
@@ -47,7 +48,7 @@ app.get("/health", (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
-app.use("/creator-profile", creatorProfileRoutes);
+// app.use("/creator-profile", creatorProfileRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
 app.use("/follow", followRoutes);
@@ -57,6 +58,7 @@ app.use("/notification", notificationRoutes);
 app.use("/analytics", analyticsRoutes);
 app.use("/report", reportRoutes);
 app.use("/admin", adminRoutes);
+app.use("/contact", contactRoutes);
 
 // Multer throws its own error type (file too large, wrong extension, etc.)
 // before it ever reaches a controller — catch it here and turn it into the
